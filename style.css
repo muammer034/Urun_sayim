@@ -56,6 +56,16 @@ button.scan-again { background: #34a853; }
   font-size: 12px;
   margin-bottom: 10px;
 }
+#address-warning {
+  background: #fef7e0;
+  color: #b06000;
+  border: 1px solid #f2c94c;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-top: 10px;
+  line-height: 1.4;
+}
 #offline-banner {
   display: none;
   background: #fbbc04;
