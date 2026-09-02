@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <title>Ürün Sayım</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a73e8">
+
+  <!-- iOS "Ana Ekrana Ekle" desteği -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sayım">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h2>📦 Ürün Sayım</h2>
+  <div id="offline-banner">⚠️ İnternet bağlantısı yok — kaydetme çalışmayacak</div>
+
+  <!-- ADIM 1: ÜRÜN KODU / BARKOD OKUT -->
+  <div class="card" id="step-scan-product">
+    <div class="badge">1) Ürün barkodunu / kodunu okutun</div>
+    <div id="reader-product"></div>
+    <div id="status"></div>
+    <button class="secondary" onclick="showManualEntry('product')">Kodu elle gir</button>
+  </div>
+
+  <!-- ADIM 2: ÜRÜN BULUNDU -> ADET GİR -->
+  <div class="card" id="step-product-found" style="display:none;">
+    <div class="badge">2) Ürün bulundu</div>
+    <div class="info-row"><span>Ürün Adı</span><span id="f-ad"></span></div>
+    <div class="info-row"><span>Malzeme Kodu</span><span id="f-malzeme"></span></div>
+    <div class="info-row"><span>Üretici Kodu</span><span id="f-uretici"></span></div>
+    <div class="info-row"><span>Barkod</span><span id="f-barkod"></span></div>
+    <div class="info-row"><span>Sistemdeki Stok</span><span id="f-stok"></span></div>
+    <input type="number" id="adetInput" placeholder="Sayılan adet" inputmode="numeric">
+    <button onclick="goToAddressStep()">Devam Et → Adres Okut</button>
+  </div>
+
+  <!-- ADIM 3: ADRES OKUT -->
+  <div class="card" id="step-scan-address" style="display:none;">
+    <div class="badge">3) Adres barkodunu okutun (veya elle girin)</div>
+    <div id="reader-address"></div>
+    <div id="status-address"></div>
+    <button class="secondary" onclick="showManualEntry('address')">Adresi elle gir</button>
+  </div>
+
+  <!-- ADIM 4: KAYDET -->
+  <div class="card" id="step-confirm" style="display:none;">
+    <div class="badge">4) Kaydı onayla</div>
+    <div class="info-row"><span>Ürün</span><span id="c-ad"></span></div>
+    <div class="info-row"><span>Adet</span><span id="c-adet"></span></div>
+    <div class="info-row"><span>Adres</span><span id="c-adres"></span></div>
+    <button onclick="confirmSave()">✅ Kaydet</button>
+    <button class="secondary" onclick="resetAll()">Vazgeç</button>
+  </div>
+
+  <!-- Manuel giriş -->
+  <div class="card" id="step-manual" style="display:none;">
+    <div class="badge" id="manual-label">Kod girin</div>
+    <input type="text" id="manualInput" placeholder="Kodu yazın">
+    <button onclick="submitManual()">Onayla</button>
+    <button class="secondary" onclick="cancelManual()">İptal</button>
+  </div>
+
+  <div class="card" id="step-done" style="display:none;">
+    <div id="status-done"></div>
+    <button class="scan-again" onclick="resetAll()">🔄 Yeni Sayım</button>
+  </div>
+
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
