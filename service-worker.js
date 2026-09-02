@@ -5,8 +5,8 @@ const APP_SHELL = [
   './app.js',
   './style.css',
   './manifest.json',
-  './icons/logo2.png',
-  './icons/logo2.png',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
   'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js'
 ];
 
