@@ -9,6 +9,20 @@ let manualTarget = null;
 let productScanner = null;
 let addressScanner = null;
 
+// Taranacak barkod tipleri: raf adresleri Code128 (ör. I17-A34-K03-S01),
+// ürün barkodları genelde EAN/UPC, artı QR/Code39 desteği de eklendi.
+const SCAN_FORMATS = [
+  Html5QrcodeSupportedFormats.CODE_128,
+  Html5QrcodeSupportedFormats.CODE_39,
+  Html5QrcodeSupportedFormats.CODABAR,
+  Html5QrcodeSupportedFormats.EAN_13,
+  Html5QrcodeSupportedFormats.EAN_8,
+  Html5QrcodeSupportedFormats.UPC_A,
+  Html5QrcodeSupportedFormats.UPC_E,
+  Html5QrcodeSupportedFormats.QR_CODE
+];
+const SCANNER_CONFIG = { formatsToSupport: SCAN_FORMATS, verbose: false };
+
 // --- Servis Worker kaydı ---
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -40,7 +54,7 @@ function startProductScanner() {
   show('step-scan-product');
   setStatus('Kamera açılıyor...');
   if (productScanner) return;
-  productScanner = new Html5Qrcode('reader-product');
+  productScanner = new Html5Qrcode('reader-product', SCANNER_CONFIG);
   Html5Qrcode.getCameras().then(() => {
     productScanner.start(
       { facingMode: 'environment' },
@@ -97,7 +111,7 @@ function startAddressScanner() {
   const statusEl = document.getElementById('status-address');
   statusEl.textContent = 'Kamera açılıyor...';
   if (addressScanner) return;
-  addressScanner = new Html5Qrcode('reader-address');
+  addressScanner = new Html5Qrcode('reader-address', SCANNER_CONFIG);
   Html5Qrcode.getCameras().then(() => {
     addressScanner.start(
       { facingMode: 'environment' },
