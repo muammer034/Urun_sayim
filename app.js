@@ -137,11 +137,34 @@ function goToConfirm() {
   document.getElementById('c-ad').textContent = currentProduct.ad;
   document.getElementById('c-adet').textContent = currentAdet;
   document.getElementById('c-adres').textContent = currentAdres;
+
+  const warningEl = document.getElementById('address-warning');
+  if (addressMismatch()) {
+    const ref = (currentProduct.referansAdres || '').toString().trim();
+    warningEl.textContent =
+      `⚠️ Bu ürünün referans adresi "${ref}" ama okutulan adres "${currentAdres}". Farklı bir adreste sayım yapıyorsunuz.`;
+    warningEl.style.display = 'block';
+  } else {
+    warningEl.style.display = 'none';
+  }
   show('step-confirm');
+}
+
+function addressMismatch() {
+  const ref = (currentProduct.referansAdres || '').toString().trim().toUpperCase();
+  const scanned = (currentAdres || '').toString().trim().toUpperCase();
+  return ref !== '' && ref !== scanned;
 }
 
 // --- Kaydet (Apps Script'e POST, text/plain -> preflight yok) ---
 async function confirmSave() {
+  if (addressMismatch()) {
+    const ref = (currentProduct.referansAdres || '').toString().trim();
+    const ok = window.confirm(
+      `Referans adres "${ref}" ile okuttuğunuz adres "${currentAdres}" uyuşmuyor.\n\nYine de bu adresle kaydetmek istediğinize emin misiniz?`
+    );
+    if (!ok) return; // vazgeçti, kaydetme
+  }
   try {
     const res = await fetch(API_URL, {
       method: 'POST',
